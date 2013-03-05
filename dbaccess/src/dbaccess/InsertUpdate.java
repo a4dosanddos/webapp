@@ -53,6 +53,8 @@ public class InsertUpdate extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		response.setContentType("text/html; charset=Windows-31J");
+		
 		PrintWriter out = response.getWriter();
 		out.println("<html>");
 		out.println("<body>");
@@ -61,18 +63,30 @@ public class InsertUpdate extends HttpServlet {
 			con = ds.getConnection();
 			Statement st = con.createStatement();
 
+			// SAMPLE2 テーブルの一覧表示 ( 更新前 )
+			out.println("<h1>SAMPLE2 テーブルの一覧表示 ( 更新前 )</h1><br>");
+			ResultSet rs_before = st.executeQuery("SELECT * FROM SAMPLE2");
+			while (rs_before.next()) {
+				out.println(rs_before.getString(1));
+				out.println(rs_before.getString(2));
+				out.println("<br>");
+			}
+			out.println("<br>");
+
 			// insert 発行
 			insert(st);
 			con.commit();
 
-			// SAMPLE2 テーブルの一覧表示
-			ResultSet rs = st.executeQuery("SELECT * FROM SAMPLE2");
-			while (rs.next()) {
-				out.println(rs.getString(1));
-				out.println(rs.getString(2));
+			// SAMPLE2 テーブルの一覧表示 ( 更新後 )
+			ResultSet rs_after = st.executeQuery("SELECT * FROM SAMPLE2");
+			out.println("<h1>SAMPLE2 テーブルの一覧表示 ( 更新後 )</h1><br>");
+			while (rs_after.next()) {
+				out.println(rs_after.getString(1));
+				out.println(rs_after.getString(2));
 				out.println("<br>");
 			}
-			rs.close();
+			rs_before.close();
+			rs_after.close();
 			st.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -104,7 +118,7 @@ public class InsertUpdate extends HttpServlet {
 	private void update(Statement st) {
 		try {
 			int result = st
-					.executeUpdate("UPDATE SAMPLE2 SET NAME='ahe' WHERE ID=3");
+					.executeUpdate("UPDATE SAMPLE2 SET NAME='aheahe' WHERE ID=3");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
